@@ -38,8 +38,8 @@ export function truncateUrl(url: string | undefined, max: number): string {
 
 export function getShortUrl(shortCode: string | undefined): string {
   if (!shortCode) return '';
-  const baseUrl = import.meta.env.SHORT_URL_BASE || window.location.origin;
-  // Ensure baseUrl doesn't end with a slash for consistent joining
+  // Correctly prefixed for Vite exposure
+  const baseUrl = import.meta.env.VITE_SHORT_URL_BASE || window.location.origin;
   const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
   return `${cleanBaseUrl}/${shortCode}`;
 }

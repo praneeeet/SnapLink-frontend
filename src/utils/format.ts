@@ -25,7 +25,7 @@ export function timeAgo(iso: string | undefined): string {
   if (hour < 24) return `${hour} hour${hour > 1 ? 's' : ''} ago`;
   const day = Math.floor(hour / 24);
   if (day < 7) return `${day} day${day > 1 ? 's' : ''} ago`;
-  
+
   return past.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
@@ -38,7 +38,10 @@ export function truncateUrl(url: string | undefined, max: number): string {
 
 export function getShortUrl(shortCode: string | undefined): string {
   if (!shortCode) return '';
-  return `http://localhost:3000/${shortCode}`;
+  const baseUrl = import.meta.env.SHORT_URL_BASE || window.location.origin;
+  // Ensure baseUrl doesn't end with a slash for consistent joining
+  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  return `${cleanBaseUrl}/${shortCode}`;
 }
 
 export function healthColor(score: number | undefined): string {
@@ -52,7 +55,7 @@ export function formatCountry(code: string | undefined): string {
   if (!code) return 'Unknown';
   if (code.toLowerCase() === 'local') return 'Local';
   if (code.length > 2) return code;
-  
+
   const map: Record<string, string> = {
     'IN': 'India',
     'US': 'USA',
@@ -66,6 +69,6 @@ export function formatCountry(code: string | undefined): string {
     'RU': 'Russia',
     'AU': 'Australia',
   };
-  
+
   return map[code.toUpperCase()] || code;
 }
